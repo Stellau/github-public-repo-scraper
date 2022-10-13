@@ -38,20 +38,33 @@ footer {
 
 footer {
   padding-top: 1.5rem;
-  margin-bottom: 0;
 }
 
 main {
   flex-wrap: wrap;
   min-height: 90vh;
+}
+
+main,
+form button {
   margin-top: 2rem;
 }
 
 main,
-i {
+i,
+form div {
   margin: 1rem;
 }
 
 i {
   font-size: 3rem;
+}
+
+footer,
+main > div > p {
+  margin-bottom: 0;
+}
+
+main > div > p {
+  margin-left: 1rem;
 }
