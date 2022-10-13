@@ -14,6 +14,11 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
+### `npm run start-backend`
+
+Starts the Flask backend at [http://127.0.0.1:5000](http://127.0.0.1:5000).\
+It allows the React app to connect to the backend.
+
 ### `npm test`
 
 Launches the test runner in the interactive watch mode.\
