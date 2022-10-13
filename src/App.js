@@ -1,11 +1,11 @@
 import Layout from './layout/Layout';
-import FetchUsersForm from './repositories/FetchUsersForm';
+import FetchPublicRepoPage from './components/FetchPublicRepoPage';
 import './App.css';
 
 function App() {
   return (
     <Layout>
-      <FetchUsersForm />
+      <FetchPublicRepoPage />
     </Layout>
   );
 }

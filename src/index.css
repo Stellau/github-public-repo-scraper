@@ -68,3 +68,7 @@ main > div > p {
 main > div > p {
   margin-left: 1rem;
 }
+
+#spinner-container {
+  height: 50vh;
+}
