@@ -1,6 +1,6 @@
 # GitHub Public Repository Scraper
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). It accepts one or more GitHub username(s) and fetches all the users' public repositories.
 
 ## Available Scripts
 
