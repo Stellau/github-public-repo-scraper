@@ -46,13 +46,15 @@ main {
 }
 
 main,
-form button {
+form button,
+ul {
   margin-top: 2rem;
 }
 
 main,
 i,
-form div {
+form div,
+li span {
   margin: 1rem;
 }
 
@@ -71,4 +73,16 @@ main > div > p {
 
 #spinner-container {
   height: 50vh;
+}
+
+li.list-group-item {
+  justify-content: flex-start;
+}
+
+li span {
+  width: 20vw;
+}
+
+ul.list-group {
+  margin-bottom: 2rem;
 }

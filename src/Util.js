@@ -1,6 +1,7 @@
-export const checkStatus = (response) => {
+export const checkStatus = async (response) => {
   if (!response.ok) {
-    throw Error("Error in request: " + response.statusText);
+    const error = await response.json();
+    throw Error("Error " + error['code'] + " in request: " + error['description']);
   }
   return response;
 };

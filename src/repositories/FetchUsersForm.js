@@ -8,6 +8,7 @@ function FetchUsersForm(props) {
   function testUsernames(users) {
     /* This piece of regular expression is taken from https://github.com/shinnn/github-username-regex,
     it tests whether a username is valid */
+    setBadUsernames([]);
     const re = new RegExp(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i);
     const goodUsers = []
     const badUsers = [];
@@ -28,7 +29,7 @@ function FetchUsersForm(props) {
     const buttonName = formRef.current.buttonName;
     let users = userInputRef.current.value;
     // separate the user names
-    users = users.split(',')
+    users = users.split(',');
     const goodUsers = testUsernames(users);
     props.onFetch(goodUsers, buttonName);
   }
@@ -39,9 +40,9 @@ function FetchUsersForm(props) {
 
   let message;
   if (badUsernames.length > 0) {
-    const badUsers = badUsernames.join(', ');
+    const badUsers = badUsernames.join(", ");
     message = 'The username(s), ' + badUsers + ', is/are invalid! Please make sure the usernames you submit are valid.';
-    message = <p>{message}</p>;
+    message = <p className="alert alert-danger">{message}</p>;
   }
 
   return (

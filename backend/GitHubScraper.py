@@ -7,7 +7,9 @@ from bs4 import BeautifulSoup
 
 class GitHubScraper:
     """
-    A class used to scrape GitHub users' names and public repositories information
+    A class used to scrape GitHub users' names and public repositories information.
+    There is one limitation though for users with many GitHub Repositories, this script
+    does not scrape all public repositories because of pagination.
 
     ...
 

@@ -4,18 +4,20 @@ import FetchUsersForm from "../repositories/FetchUsersForm";
 import RepositoryList from "../repositories/RepositoryList";
 
 function FetchPublicRepoPage() {
-  // this is to implement the loading component
+  // Loading component
   const [isLoading, setIsLoading] = useState(false);
-  // this is the loaded information
+  // Loaded information
   const [loadedUserRepos, setLoadedUserRepos] = useState([]);
-  // this is to store the users not in the database
+  // Store the users not in the database
   const [usersNotStored, setUsersNotStored] = useState([]);
+  // Server error message
+  const [serverError, setServerError] = useState("");
 
   async function getRepos(params) {
     try {
       setIsLoading(true);
       let res = await fetch("/getPublicRepos?" + params);
-      res = checkStatus(res);
+      res = await checkStatus(res);
       let result = await res.json();
       setIsLoading(false);
       const usersNotInDatabase = [];
@@ -29,7 +31,7 @@ function FetchPublicRepoPage() {
       setUsersNotStored(usersNotInDatabase);
       setLoadedUserRepos(result);
     } catch (err) {
-      console.log(err);
+      setServerError(err.message);
     }
   }
 
@@ -42,22 +44,27 @@ function FetchPublicRepoPage() {
           "Content-Type": "application/json",
         },
       });
-      res = checkStatus(res);
+      res = await checkStatus(res);
       let result = await res.json();
       setIsLoading(false);
       setLoadedUserRepos(result["users"]);
     } catch (err) {
-      console.log(err);
+      setServerError(err.message);
     }
   }
 
   async function fetchRepos(goodUsers, buttonName) {
+    // clearing the states make sure that every fetch starts on a clean slate
     setUsersNotStored([]);
-    if (buttonName === "fetch-button") {
-      const params = new URLSearchParams({ users: goodUsers.join(",") });
-      await getRepos(params);
-    } else {
-      await scrapeRepo({ users: goodUsers });
+    setLoadedUserRepos([]);
+    setServerError('');
+    if (goodUsers.length > 0) {
+      if (buttonName === "fetch-button") {
+        const params = new URLSearchParams({ users: goodUsers.join(",") });
+        await getRepos(params);
+      } else {
+        await scrapeRepo({ users: goodUsers });
+      }
     }
   }
 
@@ -70,16 +77,25 @@ function FetchPublicRepoPage() {
         </div>
       </div>
     );
-  } else {
+  } else if (loadedUserRepos.length > 0) {
     fetchResult = <RepositoryList userRepos={loadedUserRepos} />;
   }
 
   let usersNotStoredMessage;
   if (usersNotStored.length > 0) {
     usersNotStoredMessage = (
-      <p>
+      <p className="alert alert-danger">
         The users, {usersNotStored.join(", ")}, is/are not in the datbase
         currently.
+      </p>
+    );
+  }
+
+  let serverErrorMessage;
+  if (serverError) {
+    serverErrorMessage = (
+      <p className="alert alert-danger">
+        {serverError}
       </p>
     );
   }
@@ -88,6 +104,7 @@ function FetchPublicRepoPage() {
     <div>
       <FetchUsersForm onFetch={fetchRepos} />
       {usersNotStoredMessage}
+      {serverErrorMessage}
       {fetchResult}
     </div>
   );
