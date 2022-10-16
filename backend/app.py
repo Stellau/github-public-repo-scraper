@@ -55,14 +55,15 @@ def getPublicRepos():
         if select_result:
             user_id = select_result[0][0]
             user_data['name'] = select_result[0][1]
-            select_stmt = "SELECT repo_name, last_updated_date FROM repositories WHERE owner_id = %(owner_id)s"
+            select_stmt = "SELECT id, repo_name, last_updated_date FROM repositories WHERE owner_id = %(owner_id)s"
             cursor.execute(select_stmt, { 'owner_id': user_id })
             select_results = cursor.fetchall()
             if select_results:
                 for result in select_results:
                     project = {}
-                    project['name'] = result[0]
-                    project['time'] = datetime.datetime.strftime(result[1], '%Y-%m-%d %H:%M:%S')
+                    project['id'] = result[0]
+                    project['name'] = result[1]
+                    project['time'] = datetime.datetime.strftime(result[2], '%Y-%m-%d %H:%M:%S')
                     user_data['projects'].append(project)
         results['users'].append(user_data)
     db.close()
@@ -99,7 +100,7 @@ def scrapePublicRepos():
                 user_id = insertOrUpdateUser(cursor, user)
                 # add all projects to the database, if they are not already in there
                 for project in user['projects']:
-                    insertOrUpdateProject(cursor, project, user_id)
+                    project['id'] = insertOrUpdateProject(cursor, project, user_id)
             # commit the database updates
             db.commit()
             # close the database connection
@@ -175,6 +176,10 @@ def insertOrUpdateProject(cursor, project, user_id):
         A MYSQLCursor that allows changes to be made to the database
     project: JSON object
         A JSON object that contains the repository information: name, datetime last updated, and owner id.
+    Returns
+    -------
+    project_id
+        The project id of the project inserted or updated
     """
     select_stmt = "SELECT id, last_updated_date FROM repositories WHERE owner_id = %(owner_id)s AND repo_name = %(repo_name)s"
     project_data = {
@@ -191,6 +196,7 @@ def insertOrUpdateProject(cursor, project, user_id):
         )
         project_data = (project['name'], project['time'], user_id)
         cursor.execute(insert_stmt, project_data)
+        project_id = cursor.lastrowid
     else:
         project_id = select_result[0][0]
         last_updated_datetime = select_result[0][1]
@@ -208,6 +214,7 @@ def insertOrUpdateProject(cursor, project, user_id):
                 'id': project_id
             }
             cursor.execute(update_stmt, update_data)
+    return project_id
 
 def getDB():
     """

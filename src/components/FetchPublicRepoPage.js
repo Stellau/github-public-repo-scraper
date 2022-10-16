@@ -1,46 +1,94 @@
 import { useState } from "react";
 import { checkStatus } from "../Util";
 import FetchUsersForm from "../repositories/FetchUsersForm";
+import RepositoryList from "../repositories/RepositoryList";
 
-function FetchPublicRepoPage(goodUsers, buttonName) {
+function FetchPublicRepoPage() {
+  // this is to implement the loading component
   const [isLoading, setIsLoading] = useState(false);
-  // this is for passing the loaded repos to the Repository List component
-  // const [loadedRepos, setLoadedRepos] = useState([]);
+  // this is the loaded information
+  const [loadedUserRepos, setLoadedUserRepos] = useState([]);
+  // this is to store the users not in the database
+  const [usersNotStored, setUsersNotStored] = useState([]);
 
-  async function fetchRepos(goodUsers, buttonName) {
-    if (buttonName === "fetch-button") {
-      goodUsers = goodUsers.join(",");
-      const params = new URLSearchParams({ users: goodUsers });
-      try {
-        setIsLoading(true);
-        let res = await fetch("/getPublicRepos?" + params);
-        res = checkStatus(res);
-        let result = await res.json();
-        console.log(result);
-        setIsLoading(false);
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      // post request here
+  async function getRepos(params) {
+    try {
+      setIsLoading(true);
+      let res = await fetch("/getPublicRepos?" + params);
+      res = checkStatus(res);
+      let result = await res.json();
+      setIsLoading(false);
+      const usersNotInDatabase = [];
+      result = result["users"].filter((userRepo) => {
+        const userInDatabase = userRepo["projects"].length > 0;
+        if (!userInDatabase) {
+          usersNotInDatabase.push(userRepo["username"]);
+        }
+        return userInDatabase;
+      });
+      setUsersNotStored(usersNotInDatabase);
+      setLoadedUserRepos(result);
+    } catch (err) {
+      console.log(err);
     }
   }
 
-  let loadingSpinner;
+  async function scrapeRepo(params) {
+    try {
+      let res = await fetch("/scrapePublicRepos", {
+        method: "POST",
+        body: JSON.stringify(params),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      res = checkStatus(res);
+      let result = await res.json();
+      setIsLoading(false);
+      setLoadedUserRepos(result["users"]);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  async function fetchRepos(goodUsers, buttonName) {
+    setUsersNotStored([]);
+    if (buttonName === "fetch-button") {
+      const params = new URLSearchParams({ users: goodUsers.join(",") });
+      await getRepos(params);
+    } else {
+      await scrapeRepo({ users: goodUsers });
+    }
+  }
+
+  let fetchResult;
   if (isLoading) {
-    loadingSpinner = (
+    fetchResult = (
       <div id="spinner-container" className="flex center-x center-y">
         <div className="spinner-border text-dark" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
     );
+  } else {
+    fetchResult = <RepositoryList userRepos={loadedUserRepos} />;
+  }
+
+  let usersNotStoredMessage;
+  if (usersNotStored.length > 0) {
+    usersNotStoredMessage = (
+      <p>
+        The users, {usersNotStored.join(", ")}, is/are not in the datbase
+        currently.
+      </p>
+    );
   }
 
   return (
     <div>
       <FetchUsersForm onFetch={fetchRepos} />
-      {loadingSpinner}
+      {usersNotStoredMessage}
+      {fetchResult}
     </div>
   );
 }

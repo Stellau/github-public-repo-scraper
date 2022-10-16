@@ -9,11 +9,10 @@ function FetchUsersForm(props) {
     /* This piece of regular expression is taken from https://github.com/shinnn/github-username-regex,
     it tests whether a username is valid */
     const re = new RegExp(/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i);
-    // filters out all the bad user names
-    // users.filter(user => !re.test(user))
     const goodUsers = []
     const badUsers = [];
-    for (const user of users) {
+    for (let user of users) {
+        user = user.trim();
         if (re.test(user)) {
             goodUsers.push(user);
         } else {
@@ -32,13 +31,6 @@ function FetchUsersForm(props) {
     users = users.split(',')
     const goodUsers = testUsernames(users);
     props.onFetch(goodUsers, buttonName);
-    // if (buttonName === "fetch-button") {
-    //   // get data
-    //   console.log("fetch");
-    // } else {
-    //   // scrape data
-    //   console.log("scrape");
-    // }
   }
 
   function getButtonName(event) {
@@ -48,8 +40,8 @@ function FetchUsersForm(props) {
   let message;
   if (badUsernames.length > 0) {
     const badUsers = badUsernames.join(', ');
-    message = badUsers + ' are invalid! Please make sure the usernames you submit are valid.';
-    message = <p>message</p>;
+    message = 'The username(s), ' + badUsers + ', is/are invalid! Please make sure the usernames you submit are valid.';
+    message = <p>{message}</p>;
   }
 
   return (
