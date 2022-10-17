@@ -14,8 +14,8 @@ function RepositoryList(props) {
         <tr>
           <th scope="col">Repository Name</th>
           <th scope="col">Last Updated</th>
-          <th scope="col">Owner's Username</th>
-          <th scope="col">Owner's Full Name</th>
+          <th scope="col" className="center-text">Owner's Username</th>
+          <th scope="col" className="center-text">Owner's Full Name</th>
         </tr>
       </thead>
       <tbody>

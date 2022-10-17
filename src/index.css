@@ -76,3 +76,7 @@ main > div > p {
 .center-text {
   text-align: center;
 }
+
+table.table {
+  width: 75vw;
+}
