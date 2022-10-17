@@ -1,3 +1,10 @@
+/*
+ * Name: Stella Lau
+ * Start Date: 10/12/2022
+ * This component populates a single list item with the information of
+ * a give repository
+ */
+
 function Repository(props) {
     return (
         <li className="list-group-item flex">

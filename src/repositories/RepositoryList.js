@@ -1,3 +1,10 @@
+/*
+ * Name: Stella Lau
+ * Start Date: 10/12/2022
+ * This component populates a list of repositories that belong to the
+ * users requested.
+ */
+
 import Repository from "./Repository";
 
 function RepositoryList(props) {

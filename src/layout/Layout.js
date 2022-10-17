@@ -1,3 +1,9 @@
+/*
+ * Name: Stella Lau
+ * Start Date: 10/11/2022
+ * This component populates the layout for the entire webpage.
+ */
+
 import Header from "./Header";
 
 function Layout(props) {

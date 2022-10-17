@@ -1,3 +1,9 @@
+/*
+ * Name: Stella Lau
+ * Start Date: 10/11/2022
+ * This component populates the header of the webpage.
+ */
+
 function Header() {
     return (
         <header className="bg-dark sticky-top">

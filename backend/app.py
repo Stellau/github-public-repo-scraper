@@ -1,3 +1,6 @@
+# Name: Stella Lau
+# Start Date: 09/30/2022
+
 import os
 import requests
 import datetime
