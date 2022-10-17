@@ -46,15 +46,13 @@ main {
 }
 
 main,
-form button,
-ul {
+form button {
   margin-top: 2rem;
 }
 
 main,
 i,
-form div,
-li span {
+form div {
   margin: 1rem;
 }
 
@@ -75,14 +73,6 @@ main > div > p {
   height: 50vh;
 }
 
-li.list-group-item {
-  justify-content: flex-start;
-}
-
-li span {
-  width: 20vw;
-}
-
-ul.list-group {
-  margin-bottom: 2rem;
+.center-text {
+  text-align: center;
 }

@@ -7,12 +7,12 @@
 
 function Repository(props) {
     return (
-        <li className="list-group-item flex">
-            <span>{props['name']}</span>
-            <span>{props['time']}</span>
-            <span>{props['owner-name']}</span>
-            <span>{props['owner-fullname']}</span>
-        </li>
+        <tr>
+            <td>{props['name']}</td>
+            <td>{props['time']}</td>
+            <td className="center-text">{props['owner-name']}</td>
+            <td className="center-text">{props['owner-fullname']}</td>
+        </tr>
     );
 }
 
