@@ -30,7 +30,6 @@ function FetchPublicRepoPage() {
       let res = await fetch("/getPublicRepos?" + params);
       res = await checkStatus(res);
       let result = await res.json();
-      setIsLoading(false);
       const usersNotInDatabase = [];
       // only keeps the repository information for the users in the database
       result = result["users"].filter((userRepo) => {
@@ -48,6 +47,7 @@ function FetchPublicRepoPage() {
       // handle error by displaying a message
       setServerError(err.message);
     }
+    setIsLoading(false);
   }
 
   /**
@@ -67,13 +67,13 @@ function FetchPublicRepoPage() {
       });
       res = await checkStatus(res);
       let result = await res.json();
-      setIsLoading(false);
       // sets the list of loaded repositories' information
       setLoadedUserRepos(result["users"]);
     } catch (err) {
       // handle error by displaying a message
       setServerError(err.message);
     }
+    setIsLoading(false);
   }
 
   /**
