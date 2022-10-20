@@ -57,6 +57,7 @@ function FetchPublicRepoPage() {
    */
   async function scrapeRepo(params) {
     try {
+      setIsLoading(true);
       let res = await fetch("/scrapePublicRepos", {
         method: "POST",
         body: JSON.stringify(params),
